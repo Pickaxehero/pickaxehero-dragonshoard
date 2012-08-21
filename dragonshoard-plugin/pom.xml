@@ -1,0 +1,43 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>dragonshoard</groupId>
+  <artifactId>dragonshoard-plugin</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>DragonsHoard</name>
+  <description>Dragon treasure plugin ^.=.^</description>
+  
+  <distributionManagement>
+    <repository>
+      <id>local-mc-repo</id>
+      <url>file://G:/Incubator/Workspaces/Java/Maven</url>
+    </repository>
+  </distributionManagement>
+
+   
+  <build>
+  	<plugins>
+  		<plugin>
+  			<artifactId>maven-antrun-plugin</artifactId>
+  			<executions>
+  				<execution>
+  					<phase>deploy</phase>
+  					<configuration>
+  					<tasks>
+  					
+  						<copy todir="C:/Users/Samaryth Boltscale/Desktop/SpoutCraft/plugins">
+							<fileset dir="target/">
+								<include name="*.jar" />
+							</fileset>
+  						</copy>
+  						
+  					</tasks>
+  					</configuration>
+  					<goals>
+              			<goal>run</goal>
+            		</goals>
+  				</execution>
+  			</executions>
+  		</plugin>
+  	</plugins>
+  </build>
+</project>
