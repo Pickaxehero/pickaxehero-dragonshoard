@@ -76,7 +76,7 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
         }
         
         // Choose a starting point within 5 to 20 blocks height
-        int blockY = 70;//this.randGen.nextInt(16) + 5;
+        int blockY = this.randGen.nextInt(16) + 5;
         
         // Create a cluster of blocks, starting at this point
         Block oreBlock = this.currentWorld.getBlockAt(centerX, blockY, centerZ);
