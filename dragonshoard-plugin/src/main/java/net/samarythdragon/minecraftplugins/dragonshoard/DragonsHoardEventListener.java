@@ -1,25 +1,27 @@
 package net.samarythdragon.minecraftplugins.dragonshoard;
 
+import java.util.Random;
+
 import net.samarythdragon.minecraftplugins.dragonshoard.ores.RubyOre;
 
 import org.apache.commons.lang.Validate;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.World.Environment;
-import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkPopulateEvent;
-import org.bukkit.event.world.WorldInitEvent;
-import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.Vector;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.block.SpoutBlock;
-import org.getspout.spoutapi.inventory.MaterialManager;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
-import org.getspout.spoutapi.material.block.GenericCubeCustomBlock;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * Listens for and handles various events needed in this plugin.
@@ -57,10 +59,6 @@ public class DragonsHoardEventListener implements Listener {
 		
 		SpoutBlock broken = (SpoutBlock) blockBreakEvent.getBlock();
 		
-		if(broken.isCustomBlock() == false) {
-			return;
-		}
-		
 		if(broken.getCustomBlock() instanceof RubyOre) {
 			blockBreakEvent.setCancelled(true);
 			broken.setType(Material.AIR);
@@ -75,6 +73,54 @@ public class DragonsHoardEventListener implements Listener {
 				rubyGems
 			);
 		}
+	}
+	
+	@EventHandler
+	public void onEntityExplodeEvent(EntityExplodeEvent entityExplodeEvent) {
+		if(entityExplodeEvent.getEntity().getType() == EntityType.CREEPER) {
+			entityExplodeEvent.setCancelled(true);
+			Bukkit.getServer().broadcastMessage("A creeper has been neutered!");
+		}
+	}
+	
+	@EventHandler
+	public void onEntityDamageByEntityEvent(EntityDamageByEntityEvent event) {
+		if(event.getDamager().getType() == EntityType.CREEPER) {
+			event.setCancelled(true);
+			
+			if(event.getEntityType() == EntityType.PLAYER) {
+				SpoutManager.getSoundManager().playCustomSoundEffect(
+					DragonsHoardPlugin.instance(), 
+					(SpoutPlayer) event.getEntity(), 
+					"http://www.pickaxehero.com/18848.mp3", 
+					false,
+					event.getDamager().getLocation()
+				);
+			}
+		}
+		
+		if(event.getDamager().getType() == EntityType.SPIDER) {
+			Random random = new Random(System.currentTimeMillis());
+			
+			event.getDamager().setFireTicks(500);
+			event.getDamager().teleport(
+				event.getEntity().getLocation().add(
+					new Vector(
+						random.nextInt(15),
+						random.nextInt(15),
+						random.nextInt(15)
+					)
+				)
+			);
+		}
+
+	}
+	
+	@EventHandler
+	public void onPlayerJoinEvent(PlayerJoinEvent playerJoinEvent) {
+		playerJoinEvent.getPlayer().sendMessage(
+			"Hey there! This Server is running Dragon's Hoard *rawr* ^.=.^"
+		);
 	}
 	
 //	@EventHandler
