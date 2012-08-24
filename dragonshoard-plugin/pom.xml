@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>dragonshoard</groupId>
 	<artifactId>dragonshoard-plugin</artifactId>
-	<version>0.1.1-ALPHA</version>
+	<version>0.1.3-ALPHA</version>
 	<name>DragonsHoard</name>
 	<description>Dragon treasure plugin ^.=.^</description>
 	
