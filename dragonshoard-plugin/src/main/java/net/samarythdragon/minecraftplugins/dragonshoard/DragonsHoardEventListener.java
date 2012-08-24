@@ -3,6 +3,8 @@ package net.samarythdragon.minecraftplugins.dragonshoard;
 import java.util.Random;
 
 import net.samarythdragon.minecraftplugins.dragonshoard.ores.RubyOre;
+import net.samarythdragon.minecraftplugins.dragonshoard.strings.MessageI18N;
+import net.samarythdragon.minecraftplugins.dragonshoard.strings.Strings;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -26,7 +28,7 @@ import org.getspout.spoutapi.player.SpoutPlayer;
 /**
  * Listens for and handles various events needed in this plugin.
  * 
- * @author samaryth
+ * @author Pickaxehero
  *
  */
 public class DragonsHoardEventListener implements Listener {
@@ -34,16 +36,16 @@ public class DragonsHoardEventListener implements Listener {
 	private Plugin parent = null; 
 	
 	public DragonsHoardEventListener(Plugin parent) {
-		Validate.notNull(parent, "This instance must have a parent plugin! (parent == null)");
+		Validate.notNull(parent, MessageI18N.getString("DragonsHoardEventListener.ErrorPluginHasNoParent")); //$NON-NLS-1$
 		
 		this.parent = parent;
 		
-		DragonsHoardPlugin.logger().info("Event listener created!");
+		DragonsHoardPlugin.logger().info(MessageI18N.getString("DragonsHoardEventListener.InfoEventListenerCreated")); //$NON-NLS-1$
 	}
 	
 	@EventHandler
 	public void onChunkLoad(ChunkLoadEvent chunkLoadEvent) {
-		Validate.notNull(chunkLoadEvent, "Chunk load event is null!");
+		Validate.notNull(chunkLoadEvent, MessageI18N.getString("DragonsHoardEventListener.ErrorChunkLoadNoEvent")); //$NON-NLS-1$
 		
 	
 	}
@@ -55,7 +57,7 @@ public class DragonsHoardEventListener implements Listener {
 	
 	@EventHandler
 	public void onBlockBreakEvent(BlockBreakEvent blockBreakEvent) {
-		Validate.notNull(blockBreakEvent, "BlockBreakEvent ist NULL!");
+		Validate.notNull(blockBreakEvent, MessageI18N.getString("DragonsHoardEventListener.ErrorBlockBreakEventNull")); //$NON-NLS-1$
 		
 		SpoutBlock broken = (SpoutBlock) blockBreakEvent.getBlock();
 		
@@ -79,7 +81,7 @@ public class DragonsHoardEventListener implements Listener {
 	public void onEntityExplodeEvent(EntityExplodeEvent entityExplodeEvent) {
 		if(entityExplodeEvent.getEntity().getType() == EntityType.CREEPER) {
 			entityExplodeEvent.setCancelled(true);
-			Bukkit.getServer().broadcastMessage("A creeper has been neutered!");
+			Bukkit.getServer().broadcastMessage(MessageI18N.getString("DragonsHoardEventListener.InfoCreeperNeutered")); //$NON-NLS-1$
 		}
 	}
 	
@@ -92,7 +94,7 @@ public class DragonsHoardEventListener implements Listener {
 				SpoutManager.getSoundManager().playCustomSoundEffect(
 					DragonsHoardPlugin.instance(), 
 					(SpoutPlayer) event.getEntity(), 
-					"http://www.pickaxehero.com/18848.mp3", 
+					"http://www.pickaxehero.com/18848.mp3",  //$NON-NLS-1$
 					false,
 					event.getDamager().getLocation()
 				);
@@ -119,7 +121,7 @@ public class DragonsHoardEventListener implements Listener {
 	@EventHandler
 	public void onPlayerJoinEvent(PlayerJoinEvent playerJoinEvent) {
 		playerJoinEvent.getPlayer().sendMessage(
-			"Hey there! This Server is running Dragon's Hoard *rawr* ^.=.^"
+			MessageI18N.getString("DragonsHoardEventListener.InfoPlayerJoinWelcomeMessage") //$NON-NLS-1$
 		);
 	}
 	
