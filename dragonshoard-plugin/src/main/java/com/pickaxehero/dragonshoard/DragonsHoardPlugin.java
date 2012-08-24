@@ -1,13 +1,8 @@
-package net.samarythdragon.minecraftplugins.dragonshoard;
+package com.pickaxehero.dragonshoard;
 
 import java.util.List;
 import java.util.logging.Logger;
 
-import net.samarythdragon.minecraftplugins.dragonshoard.ores.AmethystOre;
-import net.samarythdragon.minecraftplugins.dragonshoard.ores.RubyGem;
-import net.samarythdragon.minecraftplugins.dragonshoard.ores.RubyOre;
-import net.samarythdragon.minecraftplugins.dragonshoard.ores.SapphireOre;
-import net.samarythdragon.minecraftplugins.dragonshoard.strings.Strings;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -15,6 +10,14 @@ import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.SpoutManager;
+
+import com.pickaxehero.dragonshoard.dragonshoard.ores.AmethystGem;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.AmethystOre;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.RubyGem;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.RubyOre;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.SapphireGem;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.SapphireOre;
+import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
 
 /**
  * The main class of the Dragon's Hoard plugin for 
@@ -35,6 +38,8 @@ public class DragonsHoardPlugin extends JavaPlugin {
 	
 	// Item singletons
 	private static RubyGem rubyGem = null;
+	private static SapphireGem sapphireGem = null;
+	private static AmethystGem amethystGem = null;
 	
 	// Self singelton
 	private static DragonsHoardPlugin selfSingleton = null;
@@ -103,6 +108,33 @@ public class DragonsHoardPlugin extends JavaPlugin {
 		return DragonsHoardPlugin.rubyGem;
 	}
 	
+	public SapphireGem sapphireGemInstance() {
+		if(DragonsHoardPlugin.sapphireGem == null) {
+			DragonsHoardPlugin.sapphireGem = new SapphireGem(this);
+		}
+		
+		return DragonsHoardPlugin.sapphireGem;
+	}
+	
+	public AmethystGem amethystGemInstance() {
+		if(DragonsHoardPlugin.amethystGem == null) {
+			DragonsHoardPlugin.amethystGem = new AmethystGem(this);
+		}
+		
+		return DragonsHoardPlugin.amethystGem;
+	}
+	
+	public void initAllCustomItems() {
+		this.rubyOreInstance();
+		this.rubyGemInstance();
+		
+		this.sapphireOreInstance();
+		this.sapphireGemInstance();
+		
+		this.amethystOreInstance();
+		this.amethystGemInstance();
+	}
+	
 	/**
 	 * Enables this plugin and initializes blocks, recipes...
 	 */
@@ -146,6 +178,7 @@ public class DragonsHoardPlugin extends JavaPlugin {
 			}
 		}
 		
+		this.initAllCustomItems();
 	}
 	
 	/**

@@ -1,6 +1,5 @@
-package net.samarythdragon.minecraftplugins.dragonshoard.ores;
+package com.pickaxehero.dragonshoard.dragonshoard.ores;
 
-import net.samarythdragon.minecraftplugins.dragonshoard.strings.Strings;
 
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
@@ -8,17 +7,19 @@ import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.material.MaterialData;
 import org.getspout.spoutapi.material.block.GenericCubeCustomBlock;
 
-public class SapphireOre extends GenericCubeCustomBlock {
+import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
 
-	public SapphireOre(Plugin plugin) {
+public class RubyOre extends GenericCubeCustomBlock {
+	
+	public RubyOre(Plugin plugin) {
 		super(
 			plugin, 
-			Strings.getString("SapphireOre.Name"),
-			Strings.getString("SapphireOre.URL"), 
+			Strings.getString("RubyOre.Name"), 
+			Strings.getString("RubyOre.URL"),  
 			16
 		);
 	}
-
+	
     public boolean isProvidingPowerTo(World world, int x, int y, int z, BlockFace face) {
         return false;
     }
@@ -37,4 +38,5 @@ public class SapphireOre extends GenericCubeCustomBlock {
     	// TODO Auto-generated method stub
     	return MaterialData.diamondOre.getLightLevel();
     }
+
 }

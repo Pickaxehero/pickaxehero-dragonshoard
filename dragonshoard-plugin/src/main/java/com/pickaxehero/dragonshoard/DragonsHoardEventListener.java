@@ -1,10 +1,7 @@
-package net.samarythdragon.minecraftplugins.dragonshoard;
+package com.pickaxehero.dragonshoard;
 
 import java.util.Random;
 
-import net.samarythdragon.minecraftplugins.dragonshoard.ores.RubyOre;
-import net.samarythdragon.minecraftplugins.dragonshoard.strings.MessageI18N;
-import net.samarythdragon.minecraftplugins.dragonshoard.strings.Strings;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
@@ -23,7 +20,15 @@ import org.bukkit.util.Vector;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.block.SpoutBlock;
 import org.getspout.spoutapi.inventory.SpoutItemStack;
+import org.getspout.spoutapi.material.CustomItem;
 import org.getspout.spoutapi.player.SpoutPlayer;
+
+import com.pickaxehero.dragonshoard.dragonshoard.ores.AmethystOre;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.RubyOre;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.SapphireGem;
+import com.pickaxehero.dragonshoard.dragonshoard.ores.SapphireOre;
+import com.pickaxehero.dragonshoard.dragonshoard.strings.MessageI18N;
+import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
 
 /**
  * Listens for and handles various events needed in this plugin.
@@ -60,21 +65,30 @@ public class DragonsHoardEventListener implements Listener {
 		Validate.notNull(blockBreakEvent, MessageI18N.getString("DragonsHoardEventListener.ErrorBlockBreakEventNull")); //$NON-NLS-1$
 		
 		SpoutBlock broken = (SpoutBlock) blockBreakEvent.getBlock();
+		CustomItem minedGem = null;
 		
 		if(broken.getCustomBlock() instanceof RubyOre) {
+			minedGem = DragonsHoardPlugin.instance().rubyGemInstance();
+		} else if(broken.getCustomBlock() instanceof SapphireOre) {
+			minedGem = DragonsHoardPlugin.instance().sapphireGemInstance();
+		} else if(broken.getCustomBlock() instanceof AmethystOre) {
+			minedGem = DragonsHoardPlugin.instance().amethystGemInstance();
+		}
+		
+		if(minedGem != null) {
 			blockBreakEvent.setCancelled(true);
 			broken.setType(Material.AIR);
 			
 			int gemCount = 1;
 			
-			SpoutItemStack rubyGems = new SpoutItemStack(DragonsHoardPlugin.instance().rubyGemInstance());
-			rubyGems.setAmount(gemCount);
+			SpoutItemStack gemStack = new SpoutItemStack(minedGem);
+			gemStack.setAmount(gemCount);
 			
 			broken.getWorld().dropItemNaturally(
 				broken.getLocation(), 
-				rubyGems
+				gemStack
 			);
-		}
+		}		
 	}
 	
 	@EventHandler

@@ -1,7 +1,10 @@
-package net.samarythdragon.minecraftplugins.dragonshoard.ores;
+package com.pickaxehero.dragonshoard.dragonshoard.ores;
+
 
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.material.item.GenericCustomItem;
+
+import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
 
 public class RubyGem extends GenericCustomItem {
 

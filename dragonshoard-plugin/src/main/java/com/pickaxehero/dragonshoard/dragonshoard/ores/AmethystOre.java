@@ -1,12 +1,13 @@
-package net.samarythdragon.minecraftplugins.dragonshoard.ores;
+package com.pickaxehero.dragonshoard.dragonshoard.ores;
 
-import net.samarythdragon.minecraftplugins.dragonshoard.strings.Strings;
 
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.material.MaterialData;
 import org.getspout.spoutapi.material.block.GenericCubeCustomBlock;
+
+import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
 
 public class AmethystOre extends GenericCubeCustomBlock {
 	public AmethystOre(Plugin plugin) {

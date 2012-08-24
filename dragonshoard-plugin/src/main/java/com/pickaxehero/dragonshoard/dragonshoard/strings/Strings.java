@@ -1,11 +1,11 @@
-package net.samarythdragon.minecraftplugins.dragonshoard.strings;
+package com.pickaxehero.dragonshoard.dragonshoard.strings;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Strings {
 	private static final String BUNDLE_NAME = 
-		"net.samarythdragon.minecraftplugins.dragonshoard.strings.strings";
+		"com.pickaxehero.dragonshoard.dragonshoard.strings.strings";
 
 	private static final ResourceBundle RESOURCE_BUNDLE = 
 		ResourceBundle.getBundle(BUNDLE_NAME);

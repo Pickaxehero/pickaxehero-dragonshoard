@@ -1,4 +1,4 @@
-package net.samarythdragon.minecraftplugins.dragonshoard;
+package com.pickaxehero.dragonshoard;
 
 import java.util.Random;
 
