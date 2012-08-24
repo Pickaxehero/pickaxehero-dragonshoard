@@ -94,7 +94,7 @@ public class DragonsHoardEventListener implements Listener {
 				SpoutManager.getSoundManager().playCustomSoundEffect(
 					DragonsHoardPlugin.instance(), 
 					(SpoutPlayer) event.getEntity(), 
-					"http://www.pickaxehero.com/18848.mp3",  //$NON-NLS-1$
+					Strings.getString("DragonsHoardEventListener.CreeperSoundURL"),  //$NON-NLS-1$
 					false,
 					event.getDamager().getLocation()
 				);
