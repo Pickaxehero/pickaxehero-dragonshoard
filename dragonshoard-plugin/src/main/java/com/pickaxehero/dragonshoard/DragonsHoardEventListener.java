@@ -5,8 +5,10 @@ import java.util.Random;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -64,6 +66,13 @@ public class DragonsHoardEventListener implements Listener {
 	public void onBlockBreakEvent(BlockBreakEvent blockBreakEvent) {
 		Validate.notNull(blockBreakEvent, MessageI18N.getString("DragonsHoardEventListener.ErrorBlockBreakEventNull")); //$NON-NLS-1$
 		
+		// Check if the player is in creative mode, so nothing will be dropped when 
+		// players break blocks then.
+		Player player = blockBreakEvent.getPlayer();
+		if((player != null) && (player.getGameMode() == GameMode.CREATIVE)) {
+			return;
+		}
+		
 		SpoutBlock broken = (SpoutBlock) blockBreakEvent.getBlock();
 		CustomItem minedGem = null;
 		
@@ -78,6 +87,7 @@ public class DragonsHoardEventListener implements Listener {
 		if(minedGem != null) {
 			blockBreakEvent.setCancelled(true);
 			broken.setType(Material.AIR);
+			broken.setCustomBlock(null);
 			
 			int gemCount = 1;
 			
