@@ -1,4 +1,4 @@
-package com.pickaxehero.dragonshoard.dragonshoard.ores;
+package com.pickaxehero.dragonshoard.ores;
 
 
 import org.bukkit.World;
@@ -7,14 +7,15 @@ import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.material.MaterialData;
 import org.getspout.spoutapi.material.block.GenericCubeCustomBlock;
 
-import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
+import com.pickaxehero.dragonshoard.strings.Strings;
 
-public class AmethystOre extends GenericCubeCustomBlock {
-	public AmethystOre(Plugin plugin) {
+public class RubyOre extends GenericCubeCustomBlock {
+	
+	public RubyOre(Plugin plugin) {
 		super(
 			plugin, 
-			Strings.getString("AmethystOre.Name"), 
-			Strings.getString("AmethystOre.URL"), 
+			Strings.getString("RubyOre.Name"), 
+			Strings.getString("RubyOre.URL"),  
 			16
 		);
 	}
@@ -35,6 +36,7 @@ public class AmethystOre extends GenericCubeCustomBlock {
     @Override
     public int getLightLevel() {
     	// TODO Auto-generated method stub
-    	return MaterialData.diamondOre.getLightLevel();
+    	return 0; // MaterialData.diamondOre.getLightLevel();
     }
+
 }

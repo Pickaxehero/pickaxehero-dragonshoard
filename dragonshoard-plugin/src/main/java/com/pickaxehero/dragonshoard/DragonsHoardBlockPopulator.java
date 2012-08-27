@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.apache.commons.lang.Validate;
 import org.bukkit.Chunk;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.generator.BlockPopulator;
@@ -11,15 +12,21 @@ import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.block.SpoutBlock;
 import org.getspout.spoutapi.material.CustomBlock;
 
-public class DragonsHoardBlockPopulator extends BlockPopulator {
+import com.pickaxehero.dragonshoard.config.ConfigManager;
 
-	private static final int RUBY_CHANCE = 40;
-	private static final int SAPPHIRE_CHANCE = 40;
-	private static final int AMETHYST_CHANCE = 40;
-	
+/**
+ * The block populator creates the ores which can be mined in certain places.
+ * 
+ * @author Pickaxehero
+ *
+ */
+public class DragonsHoardBlockPopulator extends BlockPopulator {
 	private Random randGen = null;
 	private World currentWorld = null;
 	private Chunk currentChunk = null;
+
+	// Messaging "markers"
+	private boolean firstRun = true;
 	
 	@Override
 	public void populate(World world, Random random, Chunk chunk) {
@@ -31,20 +38,37 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
 		this.randGen = random;
 		this.currentChunk = chunk;
 		
-		this.generateBlockCluster(
-			DragonsHoardPlugin.instance().rubyOreInstance(), 
-			RUBY_CHANCE
-		);
+		if(firstRun) {
+			firstRun = false;
+			DragonsHoardPlugin.logger().info("DragonsHoardBlockPopulator has started populating the ores!");
+		}
 		
-		this.generateBlockCluster(
-			DragonsHoardPlugin.instance().sapphireOreInstance(), 
-			SAPPHIRE_CHANCE
-		);
+		if(ConfigManager.getBooleanValue("RubyOre.Enabled")) {
+			this.generateBlockCluster(
+				DragonsHoardPlugin.instance().rubyOreInstance(), 
+				ConfigManager.getIntegerValue("RubyOre.SpawnChancePercent", 1, 100),
+				ConfigManager.getIntegerValue("RubyOre.MinClusterSize"),
+				ConfigManager.getIntegerValue("RubyOre.MaxClusterSize")
+			);			
+		}
 		
-		this.generateBlockCluster(
-			DragonsHoardPlugin.instance().amethystOreInstance(), 
-			AMETHYST_CHANCE
-		);		
+		if(ConfigManager.getBooleanValue("SapphireOre.Enabled")) {
+			this.generateBlockCluster(
+				DragonsHoardPlugin.instance().sapphireOreInstance(), 
+				ConfigManager.getIntegerValue("SapphireOre.SpawnChancePercent", 1, 100),
+				ConfigManager.getIntegerValue("SapphireOre.MinClusterSize"),
+				ConfigManager.getIntegerValue("SapphireOre.MaxClusterSize")
+			);
+		}
+		
+		if(ConfigManager.getBooleanValue("AmethystOre.Enabled")) {
+			this.generateBlockCluster(
+				DragonsHoardPlugin.instance().amethystOreInstance(), 
+				ConfigManager.getIntegerValue("AmethystOre.SpawnChancePercent", 1, 100),
+				ConfigManager.getIntegerValue("AmethystOre.MinClusterSize"),
+				ConfigManager.getIntegerValue("AmethystOre.MaxClusterSize")
+			);		
+		}
 	}
 	
 	/**
@@ -54,14 +78,25 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
 	 * 
 	 * @param customOreMaterial The material the new cluster should be made out of
 	 * @param chancePercent A chance in percent (0...100%) in which a new cluster should be spawned
+	 * @param minSize The cluster should contain at least minSize blocks
+	 * @param maxSize ... and atmost maxsize blocks
 	 */
-	private void generateBlockCluster(CustomBlock customOreMaterial, int chancePercent) {
+	private void generateBlockCluster(CustomBlock customOreMaterial, int chancePercent, int minSize, int maxSize) {
+		Validate.notNull(customOreMaterial, "CustomOreMaterial was NULL!");
 		Validate.isTrue(
 			(chancePercent >= 0) && (chancePercent <= 100), 
 			"Chance percentage " + chancePercent + " is outside of 0% ... 100%"
 		);
+		Validate.isTrue(
+			minSize <= maxSize, 
+			"The minimum size of a block cluster cannot be greater than its maximum size!"
+		);
 		
-		if((this.randGen.nextInt(100) + 1) >= chancePercent) {
+		// Random gen. will return a value 0...99, adding +1 will make that 1...100
+		// The higher chancePercent will be, the more likely it is for the
+		// generated random value to be at least as large as chancePercent, thus running
+		// the code after this if().
+		if((this.randGen.nextInt(100) + 1) <= chancePercent) {
 			return;
 		}
 		
@@ -69,8 +104,7 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
         int centerX = (this.currentChunk.getX() << 4) + this.randGen.nextInt(16);
         int centerZ = (this.currentChunk.getZ() << 4) + this.randGen.nextInt(16);
         
-        // If world height at this point is lower than 21 blocks,
-        // abort the generation
+        // If world height at this point is lower than 21 blocks, abort the generation
         if(this.currentWorld.getHighestBlockYAt(centerX, centerZ) < 21) {
         	return;
         }
@@ -79,13 +113,29 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
         int blockY = this.randGen.nextInt(16) + 5;
         
         // Create a cluster of blocks, starting at this point
+        // Make sure to override the new block with the custom block via SpoutAPI
         Block oreBlock = this.currentWorld.getBlockAt(centerX, blockY, centerZ);
-        SpoutManager.getMaterialManager().overrideBlock(oreBlock, customOreMaterial);
-        SpoutBlock spoutOreBlock = (SpoutBlock) oreBlock;
         
-        spoutOreBlock.setCustomBlock(customOreMaterial);
+        // Don't replace AIR since it is likely to be in a cave!
+        SpoutBlock spoutOreBlock;
         
-        for(int runNo = 0; runNo < 4; runNo++) {
+        if(oreBlock.getType() != Material.AIR) {
+        	// First set this block to AIR to avoid the block overlapping bug
+        	oreBlock.setType(Material.AIR);
+        	
+            SpoutManager.getMaterialManager().overrideBlock(oreBlock, customOreMaterial);
+            
+            spoutOreBlock = (SpoutBlock) oreBlock;
+            spoutOreBlock.setCustomBlock(customOreMaterial);
+        }
+        
+        // Range is a random number between minSize and maxSize.
+        // It will be at least minSize large, and can increase up to maxSize by the
+        // difference between maxSize - minSize.
+        // Adding +1 is not neccessary since we already have generated one block above.
+        int numberOfBlockInCluster = this.randGen.nextInt(maxSize - minSize) + minSize;
+        
+        for(int runNo = 0; runNo < numberOfBlockInCluster; runNo++) {
         	// Direction is the direction which will be build to
         	// during this iteration. Either North, South, East or West
         	int direction = this.randGen.nextInt(4);
@@ -106,10 +156,16 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
         		blockY,
         		centerZ
         	);
+        	
+        	// Again, don't replace AIR since it is likely to be in a cave!
+        	if(oreBlock.getType() == Material.AIR) {
+        		continue;
+        	}
+
         	SpoutManager.getMaterialManager().overrideBlock(oreBlock, customOreMaterial);
         	spoutOreBlock = (SpoutBlock) oreBlock;
         	spoutOreBlock.setCustomBlock(customOreMaterial);
-            
+        	
         	// Randomly build a block on top or
         	// below the currently generated one
         	int generateUpper = this.randGen.nextInt(5);
@@ -122,6 +178,10 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
             		blockY + 1,
             		centerZ
             	);
+            	
+            	// First set this block to AIR to avoid the block overlapping bug
+            	oreBlock.setType(Material.AIR);
+            	
             	SpoutManager.getMaterialManager().overrideBlock(oreBlock, customOreMaterial);
             	spoutOreBlock = (SpoutBlock) oreBlock;
             	spoutOreBlock.setCustomBlock(customOreMaterial);

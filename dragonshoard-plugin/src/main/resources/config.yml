@@ -1,0 +1,30 @@
+# Ores and stuff
+#
+# SpawnChancePercent: Per chunk chance of ore cluster
+RubyOre:
+    Enabled: true
+    SpawnChancePercent: 40
+    MinClusterSize: 2
+    MaxClusterSize: 8
+    
+SapphireOre:
+    Enabled: true
+    SpawnChancePercent: 40
+    MinClusterSize: 2
+    MaxClusterSize: 8
+    
+AmethystOre:
+    Enabled: true
+    SpawnChancePercent: 40
+    MinClusterSize: 2
+    MaxClusterSize: 8
+
+# Mob behaviour
+CreeperExplosionOverride:
+    Enabled: true
+    PlaySound: true
+    
+SpiderAttackOverride:
+    Enabled: true
+    IgniteOnAttack: true
+    TossAway: true

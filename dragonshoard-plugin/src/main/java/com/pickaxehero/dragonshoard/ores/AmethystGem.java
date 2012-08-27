@@ -1,9 +1,9 @@
-package com.pickaxehero.dragonshoard.dragonshoard.ores;
+package com.pickaxehero.dragonshoard.ores;
 
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.material.item.GenericCustomItem;
 
-import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
+import com.pickaxehero.dragonshoard.strings.Strings;
 
 public class AmethystGem extends GenericCustomItem {
 	

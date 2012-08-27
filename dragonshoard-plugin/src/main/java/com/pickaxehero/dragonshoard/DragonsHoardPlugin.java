@@ -3,7 +3,6 @@ package com.pickaxehero.dragonshoard;
 import java.util.List;
 import java.util.logging.Logger;
 
-
 import org.apache.commons.lang.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -11,20 +10,19 @@ import org.bukkit.World.Environment;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.getspout.spoutapi.SpoutManager;
 
-import com.pickaxehero.dragonshoard.dragonshoard.ores.AmethystGem;
-import com.pickaxehero.dragonshoard.dragonshoard.ores.AmethystOre;
-import com.pickaxehero.dragonshoard.dragonshoard.ores.RubyGem;
-import com.pickaxehero.dragonshoard.dragonshoard.ores.RubyOre;
-import com.pickaxehero.dragonshoard.dragonshoard.ores.SapphireGem;
-import com.pickaxehero.dragonshoard.dragonshoard.ores.SapphireOre;
-import com.pickaxehero.dragonshoard.dragonshoard.strings.Strings;
+import com.pickaxehero.dragonshoard.ores.AmethystGem;
+import com.pickaxehero.dragonshoard.ores.AmethystOre;
+import com.pickaxehero.dragonshoard.ores.RubyGem;
+import com.pickaxehero.dragonshoard.ores.RubyOre;
+import com.pickaxehero.dragonshoard.ores.SapphireGem;
+import com.pickaxehero.dragonshoard.ores.SapphireOre;
+import com.pickaxehero.dragonshoard.strings.Strings;
 
 /**
  * The main class of the Dragon's Hoard plugin for 
  * Bukkit and Spout.
  * 
- * @version 0.1a
- * @author samaryth
+ * @author Pickaxehero
  *
  */
 public class DragonsHoardPlugin extends JavaPlugin {
@@ -124,6 +122,9 @@ public class DragonsHoardPlugin extends JavaPlugin {
 		return DragonsHoardPlugin.amethystGem;
 	}
 	
+	/**
+	 * Call to init all the custom stuff at once
+	 */
 	public void initAllCustomItems() {
 		this.rubyOreInstance();
 		this.rubyGemInstance();
@@ -178,7 +179,10 @@ public class DragonsHoardPlugin extends JavaPlugin {
 			}
 		}
 		
+		// Init the ores and items. If this is not done during startup,
+		// players might experience the already spawned ores being stone blocks at first
 		this.initAllCustomItems();
+		
 	}
 	
 	/**
@@ -189,5 +193,4 @@ public class DragonsHoardPlugin extends JavaPlugin {
 	public void onDisable() {
 		super.onDisable();
 	}
-	
 }
