@@ -40,7 +40,9 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
 		
 		if(firstRun) {
 			firstRun = false;
-			DragonsHoardPlugin.logger().info("DragonsHoardBlockPopulator has started populating the ores!");
+			DragonsHoardPlugin.logger().info(
+				"DragonsHoardBlockPopulator has started populating the ores!"
+			);
 		}
 		
 		if(ConfigManager.getBooleanValue("RubyOre.Enabled")) {
