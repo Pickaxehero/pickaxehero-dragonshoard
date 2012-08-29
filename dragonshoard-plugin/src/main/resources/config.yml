@@ -20,11 +20,11 @@ AmethystOre:
     MaxClusterSize: 8
 
 # Mob behaviour
-CreeperExplosionOverride:
-    Enabled: true
-    PlaySound: true
-    
-SpiderAttackOverride:
-    Enabled: true
-    IgniteOnAttack: true
-    TossAway: true
+#CreeperExplosionOverride:
+#    Enabled: true
+#    PlaySound: true
+#    
+#SpiderAttackOverride:
+#    Enabled: true
+#    IgniteOnAttack: true
+#    TossAway: true
