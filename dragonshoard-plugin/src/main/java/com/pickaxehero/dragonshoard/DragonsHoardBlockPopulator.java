@@ -41,7 +41,7 @@ public class DragonsHoardBlockPopulator extends BlockPopulator {
 		if(firstRun) {
 			firstRun = false;
 			DragonsHoardPlugin.logger().info(
-				"DragonsHoardBlockPopulator has started populating the ores!"
+				"DragonsHoardBlockPopulator has started populating the ores"
 			);
 		}
 		
